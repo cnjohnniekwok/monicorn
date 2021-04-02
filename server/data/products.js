@@ -1,6 +1,6 @@
+//Just some fake products for development purpose
 const products = [
 	{
-		_id: "1",
 		name: "Unicorn Fuffly Chair",
 		image: "/images/unicorn-fuffly-chair.jpg",
 		description:
@@ -13,7 +13,6 @@ const products = [
 		numReviews: 12,
 	},
 	{
-		_id: "2",
 		name: "Fluffly Unicorn",
 		image: "/images/fuffly-unicorn.jpg",
 		description: "Despicable Me 2 Agnes Fluffy Unicorn stuffed toy",
@@ -25,7 +24,6 @@ const products = [
 		numReviews: 8,
 	},
 	{
-		_id: "3",
 		name: "Unicorn Fluffly-Fluff Bagpack",
 		image: "/images/unicorn-fuffly-fuff-gagpack.jpg",
 		description:
@@ -38,7 +36,6 @@ const products = [
 		numReviews: 12,
 	},
 	{
-		_id: "4",
 		name: "Unicorn Fluffly Towel",
 		image: "/images/unicorn-fuffly-towel.jpg",
 		description:
@@ -51,7 +48,6 @@ const products = [
 		numReviews: 12,
 	},
 	{
-		_id: "5",
 		name: "Unicorn Fluffly-Extra Fluff Bag",
 		image: "/images/unicorn-fuffly-extra-fuff-aag.jpg",
 		description:
@@ -64,7 +60,6 @@ const products = [
 		numReviews: 10,
 	},
 	{
-		_id: "6",
 		name: "Unicorn Double Fluffly Slippers",
 		image: "/images/unicorn-double-fuffly-slippers.jpg",
 		description:
@@ -78,4 +73,6 @@ const products = [
 	},
 ];
 
-export default products;
+export default products; //ES6 syntax
+//native javaScript:
+// module.exports = products;
