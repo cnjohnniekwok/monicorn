@@ -13,7 +13,7 @@ const Footer = () => {
 				</Row>
 				<Row>
 					<Col className="text-center copyright">
-						Copyright &copy; Johnnie Kwok@MoNicorn
+						Copyright &copy; {new Date().getFullYear()} Johnnie Kwok@MoNicorn
 					</Col>
 				</Row>
 			</Container>
