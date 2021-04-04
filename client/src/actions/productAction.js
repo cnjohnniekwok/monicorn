@@ -28,8 +28,8 @@ export const listProducts = () => async (dispatch) => {
 			// getting server error and put it into client state
 			// check generic error message error.respone and if our custom error message from the error handler middleware existed, use that instead.
 			payload:
-				error.reponse && error.reponse.data.message
-					? error.reponse.data.message
+				error.response && error.response.data.message
+					? error.response.data.message
 					: error.message,
 		});
 	}
@@ -54,8 +54,8 @@ export const listProductDetails = (id) => async (dispatch) => {
 			// getting server error and put it into client state
 			// check generic error message error.respone and if our custom error message from the error handler middleware existed, use that instead.
 			payload:
-				error.reponse && error.reponse.data.message
-					? error.reponse.data.message
+				error.response && error.response.data.message
+					? error.response.data.message
 					: error.message,
 		});
 	}

@@ -58,9 +58,6 @@ const ProductScreen = (props) => {
 
 	return (
 		<>
-			<Link className="btn btn-secondary my-3" to="/">
-				Return to home
-			</Link>
 			{loading ? (
 				<Loader />
 			) : error ? (
@@ -88,6 +85,9 @@ const ProductScreen = (props) => {
 									Discription: {product.description}
 								</ListGroup.Item>
 							</ListGroup>
+							<Link className="btn btn-block btn-secondary my-3" to="/">
+								Return to home
+							</Link>
 						</Col>
 						<Col md={3}>
 							<ListGroup variant="flush">
@@ -140,7 +140,7 @@ const ProductScreen = (props) => {
 									{/* set disable to True if product count is 0 */}
 									<Button
 										onClick={addToCartHandler}
-										className="btn-block btn-secondary"
+										className="btn-block btn-primary"
 										type="button"
 										disabled={product.countInStock === 0}
 									>

@@ -54,7 +54,7 @@ const HomeScreen = () => {
 
 	return (
 		<>
-			<h1>Every Things Fluffly</h1>
+			<h1>Top Sellers!</h1>
 			{/* if loading is true, render the spilting, otherwise render product home screen*/}
 			{loading ? (
 				<Loader />

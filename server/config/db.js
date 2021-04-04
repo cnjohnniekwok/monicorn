@@ -8,7 +8,7 @@ const connectMongoDB = async () => {
 		const mongoConn = await mongoose.connect(mongoAtlasURI, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
-			useCreatendex: true,
+			useCreateIndex: true,
 		});
 
 		console.log(

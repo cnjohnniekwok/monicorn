@@ -15,7 +15,6 @@ const app = express();
 
 //allow to accept JSON data from req.body
 app.use(express.json());
-const serverPort = process.env.SERVER_PORT || 8000;
 
 //connect to MongoDB import from config/db.js
 connectMongoDB();
@@ -46,6 +45,8 @@ app.use("/api/users", userRoutes);
 //Use error Handler middle from middleware/errorMiddleware.js
 app.use(notFound);
 app.use(errorHandler);
+
+const serverPort = process.env.SERVER_PORT || 8000;
 
 app.listen(serverPort, (req, res) => {
 	console.log(
