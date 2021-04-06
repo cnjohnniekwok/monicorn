@@ -70,7 +70,6 @@ const OrderScreen = ({ match }) => {
 		<Message variant="danger">{error}</Message>
 	) : (
 		<>
-			<h1>Order {order._id}</h1>
 			<Row>
 				<Col md={8}>
 					<ListGroup variant="flush">
@@ -78,6 +77,7 @@ const OrderScreen = ({ match }) => {
 							<ListGroup.Item>
 								<h2>Shipping</h2>
 								<p>
+									<strong>Order Number:</strong> {order._id} <br />
 									<strong>Name: </strong> {order.user.name} <br />
 									<strong>Email: </strong>
 									<a href={`mailto:${order.user.email}`}>{order.user.email}</a>
