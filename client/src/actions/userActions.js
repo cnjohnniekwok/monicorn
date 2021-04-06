@@ -7,6 +7,12 @@ import {
 	USER_REGISTER_REQUEST,
 	USER_REGISTER_SUCCESS,
 	USER_REGISTER_FAIL,
+	USER_DETAILS_REQUEST,
+	USER_DETAILS_SUCCESS,
+	USER_DETAILS_FAIL,
+	USER_UPDATE_PROFILE_REQUEST,
+	USER_UPDATE_PROFILE_SUCCESS,
+	USER_UPDATE_PROFILE_FAIL,
 } from "../constants/userConstants";
 
 export const login = (email, password) => async (dispatch) => {
@@ -21,7 +27,7 @@ export const login = (email, password) => async (dispatch) => {
 			},
 		};
 
-		//upon request, client shall make a post request to server api, passing in email and password
+		//upon request, client shall make a POST request to server api, passing in email and password
 		const { data } = await axios.post(
 			"/api/users/login",
 			{ email, password },
@@ -71,7 +77,7 @@ export const register = (name, email, password) => async (dispatch) => {
 			},
 		};
 
-		//upon request, client shall make a post request to server api, passing in email and password
+		//upon request, client shall make a POST request to server api, passing in email and password
 		const { data } = await axios.post(
 			"/api/users/",
 			{ name, email, password },
@@ -92,6 +98,99 @@ export const register = (name, email, password) => async (dispatch) => {
 	} catch (error) {
 		dispatch({
 			type: USER_REGISTER_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+// Passing in user ID only
+export const getUserDetails = (id) => async (
+	dispatch,
+	getState /* need to send a token as well getState.userInfo has our token in it*/
+) => {
+	try {
+		dispatch({
+			type: USER_DETAILS_REQUEST,
+		});
+
+		const {
+			userLogin: { userInfo },
+		} = getState(); //destructuring getState().userLogin.userInfo from store intialState
+
+		const config = {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${userInfo.token}`, //passing token in header using Bearer Token
+			},
+		};
+
+		const { data } = await axios.get(
+			`/api/users/${id}`, //get user profile with GET user server api
+			config
+		);
+
+		dispatch({
+			type: USER_DETAILS_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: USER_DETAILS_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+//Passing in an user Object
+export const updateUserProfile = (user) => async (
+	dispatch,
+	getState /* need to send a token as well getState.userInfo has our token in it*/
+) => {
+	try {
+		dispatch({
+			type: USER_UPDATE_PROFILE_REQUEST,
+		});
+
+		const {
+			userLogin: { userInfo },
+		} = getState(); //destructuring getState().userLogin.userInfo from store intialState
+
+		const config = {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${userInfo.token}`, //passing token in header using Bearer Token
+			},
+		};
+
+		const { data } = await axios.put(
+			`/api/users/profile`,
+			user, //update user profile with PUT update user server api
+			config
+		);
+
+		dispatch({
+			type: USER_UPDATE_PROFILE_SUCCESS,
+			payload: data,
+		});
+
+		//update nav bar username to current updated one
+		//-------------------------------------------------------|
+		dispatch({
+			type: USER_LOGIN_SUCCESS,
+			payload: data,
+		});
+
+		localStorage.setItem("userInfo", JSON.stringify(data));
+		//-------------------------------------------------------|
+	} catch (error) {
+		dispatch({
+			type: USER_UPDATE_PROFILE_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message

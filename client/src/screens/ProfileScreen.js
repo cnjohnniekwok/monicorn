@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { ListGroup, Card, Form, Button, Row, Col } from "react-bootstrap";
+import { Card, Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import { register } from "../actions/userActions";
-import FormContainer from "../components/FormContainer";
+import { getUserDetails, updateUserProfile } from "../actions/userActions";
+import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstants";
 
-const RegisterScreen = ({ history, location }) => {
+const ProfileScreen = ({ history, location }) => {
 	//to capture input and update state -: local state
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
@@ -17,41 +16,59 @@ const RegisterScreen = ({ history, location }) => {
 	const dispatch = useDispatch();
 
 	//declare global state (holder)
-	const userRegister = useSelector((state) => state.userRegister);
-	const { loading, error, userInfo } = userRegister;
+	const userDetails = useSelector((state) => state.userDetails);
+	const { loading, error, user } = userDetails;
 
-	const redirect = location.search ? location.search.split("=")[1] : "/";
+	//bring this in to check if user has already login
+	const userLogin = useSelector((state) => state.userLogin);
+	const { userInfo } = userLogin;
+
+	//get successful state from user update profile
+	const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+	const { success } = userUpdateProfile;
 
 	//if user already login, redirect user to
 	useEffect(
 		() => {
-			if (userInfo) {
-				//if check userInfo has info, which mean use has already login.
-				history.push(redirect); // will go to whatever in redirect.
+			if (!userInfo) {
+				//if no userInfo
+				history.push("/login"); // redirect to login screen.
+			} else {
+				if (!user.name || success) {
+					dispatch({ type: USER_UPDATE_PROFILE_RESET });
+					dispatch(getUserDetails("profile")); //this will hit the route /api/user/profile instead!
+				} else {
+					//set the form field for user's info
+					setName(user.name);
+					setEmail(user.email);
+				}
 			}
 		},
 		[
+			dispatch,
 			history,
 			userInfo,
-			redirect,
-		] /* dont forgot to list all the dependency... whatever used here */
+			user,
+			success,
+		] /* dont forgot to list all the dependency when using useEffect... whatever used here */
 	);
 
 	const submitHandler = (event) => {
 		event.preventDefault(); //so it wont refresh!
 		if (password !== confirmPassword) {
-			setMessage("Password do not match.");
+			setMessage("Password do not match."); //check confrim password is correct
 		} else {
-			dispatch(register(name, email, password));
+			dispatch(updateUserProfile({ id: user._id, name, email, password }));
 		}
 	};
 	return (
-		<FormContainer>
-			<ListGroup>
+		<Row>
+			<Col md={3}>
 				<Card className="my-3 p-3 rounded product-holder">
-					<h1>Sign Up</h1>
+					<h2>User Profile</h2>
 					{message && <Message variant="danger">{message}</Message>}
 					{error && <Message variant="danger">{error}</Message>}
+					{success && <Message variant="success">Profile Updated</Message>}
 					{loading && <Loader />}
 
 					<Form onSubmit={submitHandler}>
@@ -104,21 +121,19 @@ const RegisterScreen = ({ history, location }) => {
 						</Form.Group>
 
 						<Button type="submit" variant="primary">
-							Register
+							Update Profile
 						</Button>
-						<Row className="py-3">
-							<Col>
-								Have an Account?{" "}
-								<Link to={redirect ? `/login?redirect=${redirect}` : "/login"}>
-									Login
-								</Link>
-							</Col>
-						</Row>
 					</Form>
 				</Card>
-			</ListGroup>
-		</FormContainer>
+			</Col>
+
+			<Col md={9}>
+				<Card className="my-3 p-3 rounded product-holder">
+					<h2>May Orders</h2>
+				</Card>
+			</Col>
+		</Row>
 	);
 };
 
-export default RegisterScreen;
+export default ProfileScreen;

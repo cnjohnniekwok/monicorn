@@ -10,6 +10,7 @@ import colors from "colors"; // Just... some colors for console output
 // import products from "./data/products.js"; //initial use for mimicking data only
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 const app = express();
 
@@ -41,6 +42,12 @@ app.get("/", (req, res) => {
 //This handle the entry point for the api, productRoutes take cares the other
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
+
+//env config route for Paypal client ID
+app.get("/api/config/paypal", (req, res) =>
+	res.send(process.env.PAYPAL_CLIENT_ID)
+);
 
 //Use error Handler middle from middleware/errorMiddleware.js
 app.use(notFound);

@@ -1,7 +1,15 @@
-import { CART_ADD_ITEM, CART_REMOVE_ITEM } from "../constants/cartConstants";
+import {
+	CART_ADD_ITEM,
+	CART_REMOVE_ITEM,
+	CART_SAVE_SHIPPING_ADDRESS,
+	CART_SAVE_PAYMENT_METHOD,
+} from "../constants/cartConstants";
 
 // reduser = ( initalState={what(any objects) should be inside this state}, overall that hold many types)
-export const cartReducer = (state = { cartItems: [] }, action) => {
+export const cartReducer = (
+	state = { cartItems: [], shippingAddress: {} },
+	action
+) => {
 	switch (action.type) {
 		case CART_ADD_ITEM:
 			const item = action.payload; //new item cames in to cart
@@ -41,6 +49,19 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
 				),
 			};
 
+		case CART_SAVE_SHIPPING_ADDRESS:
+			return {
+				...state,
+				//filter out whatever product ID in the cartItems thats not equal to action payload. payload is going to be just an id passes it
+				shippingAddress: action.payload, // data that pass in from the shippingscreen form
+			};
+
+		case CART_SAVE_PAYMENT_METHOD:
+			return {
+				...state,
+				//filter out whatever product ID in the cartItems thats not equal to action payload. payload is going to be just an id passes it
+				paymentMethod: action.payload, // data that pass in from the shippingscreen form
+			};
 		default:
 			return state;
 	}

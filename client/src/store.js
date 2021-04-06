@@ -6,8 +6,18 @@ import {
 	productListReducer,
 	productDetailsReducer,
 } from "./reducers/productReducers";
+import {
+	userLoginReducer,
+	userRegisterReducer,
+	userDetailsReducer,
+	userUpdateProfileReducer,
+} from "./reducers/userReducers";
+import {
+	orderCreateReducer,
+	orderDetailsReducer,
+	orderPayReducer,
+} from "./reducers/orderReducers";
 import { cartReducer } from "./reducers/cartReducers";
-import { userLoginReducer, userRegisterReducer } from "./reducers/userReducers";
 
 //bring in each reducer created from reducers folder
 const reducer = combineReducers({
@@ -15,6 +25,11 @@ const reducer = combineReducers({
 	productDetails: productDetailsReducer,
 	userLogin: userLoginReducer,
 	userRegister: userRegisterReducer,
+	userDetails: userDetailsReducer,
+	userUpdateProfile: userUpdateProfileReducer,
+	orderCreate: orderCreateReducer,
+	orderDetails: orderDetailsReducer,
+	orderPay: orderPayReducer,
 	cart: cartReducer,
 });
 
@@ -28,9 +43,23 @@ const userInfoFromStorage = localStorage.getItem("userInfo")
 	? JSON.parse(localStorage.getItem("userInfo"))
 	: null;
 
+//same idea as cartItems
+const shippingAddressFromStorage = localStorage.getItem("shippingAddress")
+	? JSON.parse(localStorage.getItem("shippingAddress"))
+	: {};
+
+//same idea as cartItems
+const paymentMethodFromStorage = localStorage.getItem("paymentMethod")
+	? JSON.parse(localStorage.getItem("paymentMethod"))
+	: {};
+
 const initialState = {
 	//cart init state is defined above and it get update from localStorage 'cartItems' state
-	cart: { cartItems: cartItemsFromStorage },
+	cart: {
+		cartItems: cartItemsFromStorage,
+		shippingAddress: shippingAddressFromStorage,
+		paymentMethod: paymentMethodFromStorage,
+	},
 	userLogin: { userInfo: userInfoFromStorage },
 }; //to store usertoken, cartitems
 

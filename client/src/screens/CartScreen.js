@@ -46,68 +46,74 @@ const CartScreen = ({ match, location, history }) => {
 							You cart is empty <Link to="/">Return Home</Link>
 						</Message>
 					) : (
-						<ListGroup variant="flush">
-							{cartItems.map((eachItem) => (
-								<ListGroup.Item key={eachItem.product}>
-									<Row>
-										<Col md={2}>
-											<Image
-												src={eachItem.image}
-												alt={eachItem.name}
-												fluid
-												rounded
-											></Image>
-										</Col>
-										<Col md={3}>
-											<Link to={`/product/${eachItem.product}`}>
-												{eachItem.name}
-											</Link>
-										</Col>
-										<Col md={2}>£{eachItem.price}</Col>
-										<Col md={2}>
-											<Form.Control
-												as="select"
-												value={
-													eachItem.qty /* let user update their cart item qty */
-												}
-												onChange={(event) => {
-													/*since there's no setQty in this local screen, just call addToCart instead,
+						<Card className="rounded product-holder">
+							<ListGroup variant="flush">
+								{cartItems.map((eachItem) => (
+									<ListGroup.Item key={eachItem.product}>
+										<Row>
+											<Col md={2}>
+												<Image
+													src={eachItem.image}
+													alt={eachItem.name}
+													fluid
+													rounded
+												></Image>
+											</Col>
+											<Col md={3}>
+												<Link to={`/product/${eachItem.product}`}>
+													{eachItem.name}
+												</Link>
+											</Col>
+											<Col md={2}>£{eachItem.price}</Col>
+											<Col md={2}>
+												<Form.Control
+													as="select"
+													value={
+														eachItem.qty /* let user update their cart item qty */
+													}
+													onChange={(event) => {
+														/*since there's no setQty in this local screen, just call addToCart instead,
 												and addToCart is an action, need to call dispatch for it*/
-													dispatch(
-														addToCart(
-															eachItem.product,
-															Number(event.target.value)
+														dispatch(
+															addToCart(
+																eachItem.product,
+																Number(event.target.value)
+															)
+														);
+													}}
+												>
+													{
+														/* want to have somthing like [1,2,3, ... , N] for users to choose from*/
+														[...Array(eachItem.countInStock).keys()].map(
+															(x) => (
+																<option key={x + 1} value={x + 1}>
+																	{x + 1}
+																</option> /*x starts with 0*/
+															)
 														)
-													);
-												}}
-											>
-												{
-													/* want to have somthing like [1,2,3, ... , N] for users to choose from*/
-													[...Array(eachItem.countInStock).keys()].map((x) => (
-														<option key={x + 1} value={x + 1}>
-															{x + 1}
-														</option> /*x starts with 0*/
-													))
-												}
-											</Form.Control>
-										</Col>
-										<Col md={2}>
-											<Button
-												type="button"
-												variant="light"
-												onClick={() => removeFromCartHandler(eachItem.product)}
-											>
-												<i className="fas fa-trash"></i>
-											</Button>
-										</Col>
-									</Row>
-								</ListGroup.Item>
-							))}
-						</ListGroup>
+													}
+												</Form.Control>
+											</Col>
+											<Col md={2}>
+												<Button
+													type="button"
+													variant="light"
+													onClick={() =>
+														removeFromCartHandler(eachItem.product)
+													}
+												>
+													<i className="fas fa-trash"></i>
+												</Button>
+											</Col>
+										</Row>
+									</ListGroup.Item>
+								))}
+							</ListGroup>
+						</Card>
 					)}
 				</Col>
 				<Col md={4}>
-					<Card>
+					<Card className="rounded product-holder">
 						<ListGroup variant="flush">
 							<ListGroup.Item>
 								<h2>
@@ -135,7 +141,7 @@ const CartScreen = ({ match, location, history }) => {
 								<Button
 									type="button"
 									className="btn-block"
-									disable={cartItems.length === 0}
+									disabled={cartItems.length === 0}
 									onClick={checkOutHandler}
 								>
 									Proceed To Checkout
