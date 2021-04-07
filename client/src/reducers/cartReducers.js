@@ -3,6 +3,7 @@ import {
 	CART_REMOVE_ITEM,
 	CART_SAVE_SHIPPING_ADDRESS,
 	CART_SAVE_PAYMENT_METHOD,
+	CART_ITEM_RESET,
 } from "../constants/cartConstants";
 
 // reduser = ( initalState={what(any objects) should be inside this state}, overall that hold many types)
@@ -62,6 +63,9 @@ export const cartReducer = (
 				//filter out whatever product ID in the cartItems thats not equal to action payload. payload is going to be just an id passes it
 				paymentMethod: action.payload, // data that pass in from the shippingscreen form
 			};
+
+		case CART_ITEM_RESET:
+			return { cartItems: [], shippingAddress: { ...state.shippingAddress } };
 		default:
 			return state;
 	}

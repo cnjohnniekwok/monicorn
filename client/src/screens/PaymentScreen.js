@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/FormContainer";
 import CheckOutSteps from "../components/CheckOutSteps";
 import { savePaymentMethod } from "../actions/cartAction";
+import { ORDER_CREATE_RESET } from "../constants/orderConstants";
 
 const PaymentScreen = ({ history }) => {
 	const cart = useSelector((state) => state.cart);
@@ -20,6 +21,7 @@ const PaymentScreen = ({ history }) => {
 	const submitHandler = (event) => {
 		event.preventDefault();
 		dispatch(savePaymentMethod(paymentMethod)); //saves shipping address info into local storage for user returning use.
+		dispatch({ type: ORDER_CREATE_RESET });
 		history.push("/placeorder");
 	};
 

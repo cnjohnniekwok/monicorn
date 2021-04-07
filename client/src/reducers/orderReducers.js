@@ -2,6 +2,7 @@ import {
 	ORDER_CREATE_REQUEST,
 	ORDER_CREATE_SUCCESS,
 	ORDER_CREATE_FAIL,
+	ORDER_CREATE_RESET,
 	ORDER_DETAILS_REQUEST,
 	ORDER_DETAILS_SUCCESS,
 	ORDER_DETAILS_FAIL,
@@ -9,6 +10,11 @@ import {
 	ORDER_PAY_SUCCESS,
 	ORDER_PAY_FAIL,
 	ORDER_PAY_RESET,
+	ORDER_MYORDERS_REQUEST,
+	ORDER_MYORDERS_SUCCESS,
+	ORDER_MYORDERS_FAIL,
+	ORDER_MYORDERS_RESET,
+	ORDER_MYORDERS_UPDATE,
 } from "../constants/orderConstants";
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -28,6 +34,9 @@ export const orderCreateReducer = (state = {}, action) => {
 				loading: false,
 				error: action.payload,
 			};
+
+		case ORDER_CREATE_RESET:
+			return {};
 
 		default:
 			return state;
@@ -79,6 +88,30 @@ export const orderPayReducer = (state = {}, action) => {
 			};
 		case ORDER_PAY_RESET:
 			return {};
+		default:
+			return state;
+	}
+};
+
+export const orderMyOrdersReducer = (state = { orders: [] }, action) => {
+	switch (action.type) {
+		case ORDER_MYORDERS_REQUEST:
+			return {
+				...state,
+				loading: true,
+			};
+		case ORDER_MYORDERS_SUCCESS:
+			return {
+				loading: false,
+				orders: action.payload,
+			};
+		case ORDER_MYORDERS_FAIL:
+			return {
+				loading: false,
+				error: action.payload,
+			};
+		case ORDER_MYORDERS_RESET:
+			return { orders: [] }; //pass in empty state to reset the profile screen
 		default:
 			return state;
 	}
