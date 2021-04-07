@@ -2,17 +2,20 @@
 // const express = require("express");
 // const dotenv = require("dotenv");
 //const products = require("./data/products"); //using native javaScript for product export
+import path from "path";
 import express from "express";
 import dotenv from "dotenv";
-dotenv.config(); //place ".env file at root, not server folder"
 import connectMongoDB from "./config/db.js";
-import colors from "colors"; // Just... some colors for console output
-// import products from "./data/products.js"; //initial use for mimicking data only
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+import colors from "colors"; // Just... some colors for console output
+// import products from "./data/products.js"; //initial use for mimicking data only
+dotenv.config(); //place ".env file at root, not server folder"
+
 const app = express();
+const __dirname = path.resolve();
 
 //allow to accept JSON data from req.body
 app.use(express.json());
@@ -34,11 +37,6 @@ connectMongoDB();
 // 	});
 // });
 
-//Now, using real routes
-app.get("/", (req, res) => {
-	res.send("Server API is runnning ... ");
-});
-
 //This handle the entry point for the api, productRoutes take cares the other
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
@@ -49,11 +47,26 @@ app.get("/api/config/paypal", (req, res) =>
 	res.send(process.env.PAYPAL_CLIENT_ID)
 );
 
+//Make static folder path to build file for heroku deployment
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "/client/build")));
+
+	//any route that is not any of the route defined up above, will point to the static folder's index.html
+	app.get("*", (req, res) =>
+		res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+	);
+} else {
+	//if dev mode:
+	app.get("/", (req, res) => {
+		res.send("Server API is runnning ... ");
+	});
+}
+
 //Use error Handler middle from middleware/errorMiddleware.js
 app.use(notFound);
 app.use(errorHandler);
 
-const serverPort = process.env.SERVER_PORT || 8000;
+const serverPort = process.env.PORT || 8000;
 
 app.listen(serverPort, (req, res) => {
 	console.log(

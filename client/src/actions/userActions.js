@@ -14,8 +14,13 @@ import {
 	USER_UPDATE_PROFILE_REQUEST,
 	USER_UPDATE_PROFILE_SUCCESS,
 	USER_UPDATE_PROFILE_FAIL,
+	USER_LIST_REQUEST,
+	USER_LIST_SUCCESS,
+	USER_LIST_FAIL,
+	USER_LIST_RESET,
 } from "../constants/userConstants";
 import { ORDER_MYORDERS_RESET } from "../constants/orderConstants";
+import { useEffect } from "react";
 
 export const login = (email, password) => async (dispatch) => {
 	try {
@@ -59,7 +64,7 @@ export const logout = () => (dispatch) => {
 	dispatch({ type: USER_LOGIN_LOGOUT });
 	dispatch({ type: USER_DETAILS_RESET }); //call the const on logout to reset profile
 	dispatch({ type: ORDER_MYORDERS_RESET }); //call the const on logout to reset profile
-
+	dispatch({ type: USER_LIST_RESET });
 	// localStorage.removeItem('cartItems')
 	// localStorage.removeItem('shippingAddress')
 	// localStorage.removeItem('paymentMethod')
@@ -194,6 +199,42 @@ export const updateUserProfile = (user) => async (
 	} catch (error) {
 		dispatch({
 			type: USER_UPDATE_PROFILE_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const listUsersProfile = () => async (
+	dispatch,
+	getState /* need to send a token as well getState.userInfo has our token in it*/
+) => {
+	try {
+		dispatch({
+			type: USER_LIST_REQUEST,
+		});
+
+		const {
+			userLogin: { userInfo },
+		} = getState(); //destructuring getState().userLogin.userInfo from store intialState
+
+		const config = {
+			headers: {
+				Authorization: `Bearer ${userInfo.token}`, //passing token in header using Bearer Token
+			},
+		};
+
+		const { data } = await axios.get(`/api/users/`, config);
+
+		dispatch({
+			type: USER_LIST_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: USER_LIST_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message

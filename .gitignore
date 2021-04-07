@@ -9,8 +9,8 @@ node_modules/
 # testing
 /coverage
 
-# production
-/build
+# production, build folder in client folder
+/client/build
 
 # misc
 .DS_Store
