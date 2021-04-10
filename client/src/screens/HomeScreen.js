@@ -7,8 +7,10 @@ import { useDispatch, useSelector } from "react-redux";
 // import axios from "axios"; /* use for local state control */
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import Paginate from "../components/Paginate";
+import ProductCarousel from "../components/ProductCarousel";
 
-const HomeScreen = () => {
+const HomeScreen = ({ match }) => {
 	// /*========================================================================|
 	// 	useState for component local state control, state and action needs to
 	// 	pass in level by level...
@@ -44,16 +46,26 @@ const HomeScreen = () => {
 	const productList = useSelector((state) => {
 		return state.productList;
 	}); // from store.js a reducer
-	const { loading, error, products } = productList; // destructure productListReducer return value
+
+	//Search Bar
+	const keyword = match.params.keyword;
+
+	//pageing
+	const pageNumber = match.params.pageNumber || 1;
+
+	const { loading, error, products, page, pages } = productList; // destructure productListReducer return value
 
 	useEffect(() => {
-		dispatch(listProducts());
+		dispatch(listProducts(keyword, pageNumber));
 	}, [
 		dispatch,
+		keyword,
+		pageNumber,
 	]); /* since dispatch was used just add it as dependency to get rid of the warnings*/
 
 	return (
 		<>
+			{!keyword && <ProductCarousel />}
 			<h1>Top Sellers!</h1>
 			{/* if loading is true, render the spilting, otherwise render product home screen*/}
 			{loading ? (
@@ -61,13 +73,20 @@ const HomeScreen = () => {
 			) : error ? (
 				<Message variant="danger">{error}</Message>
 			) : (
-				<Row>
-					{products.map((eachProduct) => (
-						<Col key={eachProduct._id} sm={12} md={6} lg={4} x1={3}>
-							<Products productProps={eachProduct} />
-						</Col>
-					))}
-				</Row>
+				<>
+					<Row>
+						{products.map((eachProduct) => (
+							<Col key={eachProduct._id} sm={12} md={6} lg={4} x1={3}>
+								<Products productProps={eachProduct} />
+							</Col>
+						))}
+					</Row>
+					<Paginate
+						pages={pages}
+						page={page}
+						keyword={keyword ? keyword : ""}
+					/>
+				</>
 			)}
 		</>
 	);

@@ -11,6 +11,11 @@ const reviewSchema = mongoose.Schema(
 			required: true,
 		},
 		comment: { type: String, required: true },
+		user: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: true,
+			ref: "User", //referencing to the "User" model which created at userModel.js
+		},
 	},
 	{ timestamps: true }
 );

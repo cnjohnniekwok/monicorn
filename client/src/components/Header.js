@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { logout } from "../actions/userActions";
+import { Route } from "react-router-dom";
+import SearchBar from "../components/SearchBox";
 
 const Header = () => {
 	//check for useInfo
@@ -29,6 +31,8 @@ const Header = () => {
 
 					{/*Navigation Link *Always Showing* */}
 					<Navbar.Collapse id="basic-navbar-nav">
+						{/*use Router-dom to pass props.history to SearchBar for history.push */}
+						<Route render={({ history }) => <SearchBar history={history} />} />
 						<Nav className="ml-auto">
 							<LinkContainer to="/cart">
 								{/* so it can route without refreshing the page using herf*/}

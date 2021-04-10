@@ -10,6 +10,7 @@ import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import uploadroutes from "./routes/uploadRoutes.js";
+import morgan from "morgan";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import colors from "colors"; // Just... some colors for console output
 // import products from "./data/products.js"; //initial use for mimicking data only
@@ -62,6 +63,8 @@ if (process.env.NODE_ENV === "production") {
 	app.get("/", (req, res) => {
 		res.send("Server API is runnning ... ");
 	});
+
+	app.use(morgan("dev"));
 }
 
 //make upload folder static

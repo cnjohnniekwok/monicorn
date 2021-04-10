@@ -15,17 +15,27 @@ import {
 	PRODUCT_DELETE_REQUEST,
 	PRODUCT_DELETE_SUCCESS,
 	PRODUCT_DELETE_FAIL,
+	PRODUCT_CREATE_REVIEW_REQUEST,
+	PRODUCT_CREATE_REVIEW_SUCCESS,
+	PRODUCT_CREATE_REVIEW_FAIL,
+	PRODUCT_TOP_REQUEST,
+	PRODUCT_TOP_SUCCESS,
+	PRODUCT_TOP_FAIL,
 } from "../constants/productConstants";
 import axios from "axios";
 
 //dispatch action using thunk like below:
-export const listProducts = () => async (dispatch) => {
+export const listProducts = (keyword = "", pageNumber = "") => async (
+	dispatch
+) => {
 	try {
 		//list of action take place here
 		dispatch({ type: PRODUCT_LIST_REQUEST });
 
 		//same as useEffect previous calls in the product Home Screen
-		const { data } = await axios.get("/api/products");
+		const { data } = await axios.get(
+			`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+		);
 
 		dispatch({
 			type: PRODUCT_LIST_SUCCESS,
@@ -34,6 +44,30 @@ export const listProducts = () => async (dispatch) => {
 	} catch (error) {
 		dispatch({
 			type: PRODUCT_LIST_FAIL,
+			// getting server error and put it into client state
+			// check generic error message error.respone and if our custom error message from the error handler middleware existed, use that instead.
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const listTopProducts = () => async (dispatch) => {
+	try {
+		//list of action take place here
+		dispatch({ type: PRODUCT_TOP_REQUEST });
+
+		//same as useEffect previous calls in the product Home Screen
+		const { data } = await axios.get("/api/products/top");
+		dispatch({
+			type: PRODUCT_TOP_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: PRODUCT_TOP_FAIL,
 			// getting server error and put it into client state
 			// check generic error message error.respone and if our custom error message from the error handler middleware existed, use that instead.
 			payload:
@@ -169,6 +203,44 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
 	} catch (error) {
 		dispatch({
 			type: PRODUCT_DELETE_FAIL,
+			// getting server error and put it into client state
+			// check generic error message error.respone and if our custom error message from the error handler middleware existed, use that instead.
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const createProductReview = (productId, review) => async (
+	dispatch,
+	getState
+) => {
+	try {
+		//list of action take place here
+		dispatch({ type: PRODUCT_CREATE_REVIEW_REQUEST });
+
+		const {
+			userLogin: { userInfo },
+		} = getState(); //destructuring getState().userLogin.userInfo from store intialState
+
+		const config = {
+			headers: {
+				"Content-Tpye": "application/json",
+				Authorization: `Bearer ${userInfo.token}`, //passing token in header using Bearer Token
+			},
+		};
+
+		//same as useEffect previous calls in the product Home Screen
+		await axios.post(`/api/products/${productId}/reviews`, review, config);
+
+		dispatch({
+			type: PRODUCT_CREATE_REVIEW_SUCCESS,
+		});
+	} catch (error) {
+		dispatch({
+			type: PRODUCT_CREATE_REVIEW_FAIL,
 			// getting server error and put it into client state
 			// check generic error message error.respone and if our custom error message from the error handler middleware existed, use that instead.
 			payload:
