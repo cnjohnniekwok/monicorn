@@ -9,6 +9,7 @@ import connectMongoDB from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import uploadroutes from "./routes/uploadRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import colors from "colors"; // Just... some colors for console output
 // import products from "./data/products.js"; //initial use for mimicking data only
@@ -41,6 +42,7 @@ connectMongoDB();
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/upload", uploadroutes);
 
 //env config route for Paypal client ID
 app.get("/api/config/paypal", (req, res) =>
@@ -61,6 +63,9 @@ if (process.env.NODE_ENV === "production") {
 		res.send("Server API is runnning ... ");
 	});
 }
+
+//make upload folder static
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 //Use error Handler middle from middleware/errorMiddleware.js
 app.use(notFound);
