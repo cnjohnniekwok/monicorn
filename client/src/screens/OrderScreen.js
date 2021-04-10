@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ListGroup, Card, Row, Col, Image } from "react-bootstrap";
+import { ListGroup, Card, Row, Col, Image, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
@@ -11,23 +11,40 @@ import {
 	listMyOrders,
 } from "../actions/orderActions";
 import { PayPalButton } from "react-paypal-button-v2";
-import { ORDER_PAY_RESET } from "../constants/orderConstants";
+import {
+	ORDER_PAY_RESET,
+	ORDER_DELIVER_RESET,
+} from "../constants/orderConstants";
+import { deliverOrder } from "../actions/orderActions";
 
-const OrderScreen = ({ match }) => {
+const OrderScreen = ({ match, history }) => {
 	const orderId = match.params.id;
 	const dispatch = useDispatch();
+
+	const userLogin = useSelector((state) => state.userLogin);
+	const { userInfo } = userLogin;
+
 	const orderDetails = useSelector((state) => state.orderDetails);
 	const { order, loading, error } = orderDetails;
 
-	const orderPay = useSelector((state) => state.orderPay);
-
 	// just renaming the orderPay state
+	const orderPay = useSelector((state) => state.orderPay);
 	const { loading: loadingPay, success: successPay } = orderPay;
+
+	const orderDeliver = useSelector((state) => state.orderDeliver);
+	const {
+		loading: loadingDeliver,
+		error: errorDeliver,
+		success: successDeliver,
+	} = orderDeliver;
 
 	//keep a state for PayPal SDK to load
 	const [paypalSDKready, setPaypalSDKready] = useState(false);
 
 	useEffect(() => {
+		if (!userInfo) {
+			history.push("/login");
+		}
 		//Dynamically adding the paypay SDK while use
 		//-----------------------------------------------------------------------|
 		const addPayPalScript = async () => {
@@ -49,8 +66,9 @@ const OrderScreen = ({ match }) => {
 		};
 		//-----------------------------------------------------------------------|
 
-		if (!order || successPay || order._id !== orderId) {
+		if (!order || successPay || successDeliver || order._id !== orderId) {
 			dispatch({ type: ORDER_PAY_RESET }); //reset the payment state to aviod infinite loop of refresh
+			dispatch({ type: ORDER_DELIVER_RESET });
 			dispatch(getOrderDetails(orderId));
 		} else if (!order.isPaid) {
 			//if order is not paid,
@@ -62,7 +80,11 @@ const OrderScreen = ({ match }) => {
 				setPaypalSDKready(true);
 			}
 		}
-	}, [dispatch, orderId, order, successPay]);
+	}, [dispatch, history, userInfo, orderId, order, successPay, successDeliver]);
+
+	const deliverHandler = () => {
+		dispatch(deliverOrder(order));
+	};
 
 	const successPaymentHandler = (paymentResult) => {
 		//console.log(paymentResult);
@@ -93,7 +115,7 @@ const OrderScreen = ({ match }) => {
 								</p>
 								{order.isDelivered ? (
 									<Message variant="success">
-										Delivered on {order.isDelivered}
+										Delivered on {order.deliveredAt.substring(0, 10)}
 									</Message>
 								) : (
 									<Message variant="primary">Not Delivered</Message>
@@ -106,7 +128,9 @@ const OrderScreen = ({ match }) => {
 									{order.paymentMethod}
 								</p>
 								{order.isPaid ? (
-									<Message variant="success">Paid on {order.paidAt}</Message>
+									<Message variant="success">
+										Paid on {order.paidAt.substring(0, 10)}
+									</Message>
 								) : (
 									<Message variant="primary">Not Paid</Message>
 								)}
@@ -190,6 +214,26 @@ const OrderScreen = ({ match }) => {
 									)}
 								</ListGroup.Item>
 							)}
+							{loadingDeliver && <Loader />}
+							{errorDeliver && (
+								<Message variant="danger">
+									Unable to submit, Error found.
+								</Message>
+							)}
+							{userInfo &&
+								userInfo.isAdmin &&
+								order.isPaid &&
+								!order.isDelivered && (
+									<ListGroup.Item>
+										<Button
+											type="button"
+											className="btn btn-block"
+											onClick={deliverHandler}
+										>
+											Mark as Delivered
+										</Button>
+									</ListGroup.Item>
+								)}
 						</ListGroup>
 					</Card>
 				</Col>

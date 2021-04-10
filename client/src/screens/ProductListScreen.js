@@ -32,7 +32,7 @@ const ProductListScreen = ({ history, match }) => {
 	const {
 		loading: loadingCreate,
 		error: errorCreate,
-		success: successCreateDel,
+		success: successCreate,
 		product: createdProduct,
 	} = productCreate;
 
@@ -50,21 +50,22 @@ const ProductListScreen = ({ history, match }) => {
 	useEffect(() => {
 		dispatch({ type: PRODUCT_CREATE_RESET });
 		//this userInfo got from userLogin useing useSelector global state.
-		if (!userInfo.isAdmin) {
-			history.push("/login");
-		}
-
-		if (successCreateDel) {
-			history.push(`/admin/products/${createdProduct._id}/edit`);
+		if (userInfo && userInfo.isAdmin) {
+			if (successCreate) {
+				history.push(`/admin/products/${createdProduct._id}/edit`);
+			} else {
+				dispatch(listProducts());
+			}
 		} else {
-			dispatch(listProducts());
+			//is not admin, kick them out
+			history.push("/login");
 		}
 	}, [
 		dispatch,
 		history,
 		userInfo,
 		successProductDel,
-		successCreateDel,
+		successCreate,
 		createdProduct,
 	]); //change effect will run again due to dependency changes
 
@@ -94,12 +95,12 @@ const ProductListScreen = ({ history, match }) => {
 						<thead>
 							<tr>
 								<th>ID</th>
-								<th>Name</th>
+								<th>NAME</th>
 								<th>PRICE</th>
 								<th>CATEGORY</th>
 								<th>BRAND</th>
-								<th>Stocks</th>
-								<th></th>
+								<th>STOCK</th>
+								<th>ACTIONS</th>
 							</tr>
 						</thead>
 						<tbody>

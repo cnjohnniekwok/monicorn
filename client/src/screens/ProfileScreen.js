@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
-import { listMyOrders } from "../actions/orderActions";
+import { listMyOrders, deleteOrder } from "../actions/orderActions";
 import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstants";
 
 const ProfileScreen = ({ history, location }) => {
@@ -33,6 +33,9 @@ const ProfileScreen = ({ history, location }) => {
 	const orderMyOrders = useSelector((state) => state.orderMyOrders);
 	const { loading: loadingOrders, error: errorOrders, orders } = orderMyOrders;
 
+	const orderDelete = useSelector((state) => state.orderDelete);
+	const { loading: loadingDel, success: successDel } = orderDelete;
+
 	useEffect(
 		() => {
 			if (!userInfo) {
@@ -56,6 +59,7 @@ const ProfileScreen = ({ history, location }) => {
 			userInfo,
 			user,
 			success,
+			successDel,
 		] /* dont forgot to list all the dependency when using useEffect... whatever used here */
 	);
 
@@ -65,6 +69,18 @@ const ProfileScreen = ({ history, location }) => {
 			setMessage("Password do not match."); //check confrim password is correct
 		} else {
 			dispatch(updateUserProfile({ id: user._id, name, email, password }));
+		}
+	};
+
+	const deleteHandler = (order, userName) => {
+		//onClick actions goes here
+		if (
+			window.confirm(
+				`Are you sure to remove order ID (${order._id}) for user (${userName})?`
+			)
+		) {
+			dispatch(deleteOrder(order));
+			console.log("Order reomved");
 		}
 	};
 	return (
@@ -149,7 +165,7 @@ const ProfileScreen = ({ history, location }) => {
 									<th>TOTAL</th>
 									<th>PAID</th>
 									<th>DELIVERED</th>
-									<th></th>
+									<th>ACTION</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -184,6 +200,18 @@ const ProfileScreen = ({ history, location }) => {
 													Details
 												</Button>
 											</LinkContainer>
+											{!order.isPaid && (
+												<Button
+													variant="primary"
+													className="btn-sm ml-2"
+													onClick={() =>
+														deleteHandler(order._id, order.user.name)
+													}
+												>
+													<i className="fas fa-trash"></i>
+													{loadingDel && <Loader />}
+												</Button>
+											)}
 										</td>
 									</tr>
 								))}
