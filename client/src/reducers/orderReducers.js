@@ -14,7 +14,6 @@ import {
 	ORDER_MYORDERS_SUCCESS,
 	ORDER_MYORDERS_FAIL,
 	ORDER_MYORDERS_RESET,
-	ORDER_MYORDERS_UPDATE,
 } from "../constants/orderConstants";
 
 export const orderCreateReducer = (state = {}, action) => {

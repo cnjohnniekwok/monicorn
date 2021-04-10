@@ -25,6 +25,7 @@ const Footer = () => {
 								className="btn btn-outline-light btn-floating m-1"
 								href="https://www.linkedin.com/in/johnniekwok/"
 								target="_blank"
+								rel="noreferrer"
 								role="button"
 							>
 								<i className="fab fa-linkedin-in"></i>
@@ -32,6 +33,8 @@ const Footer = () => {
 							<a
 								className="btn btn-outline-light btn-floating m-1"
 								href="https://github.com/cnjohnniekwok/mobar"
+								target="_blank"
+								rel="noreferrer"
 								role="button"
 							>
 								<i className="fab fa-github"></i>

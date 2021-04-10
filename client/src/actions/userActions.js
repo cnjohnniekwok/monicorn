@@ -14,13 +14,18 @@ import {
 	USER_UPDATE_PROFILE_REQUEST,
 	USER_UPDATE_PROFILE_SUCCESS,
 	USER_UPDATE_PROFILE_FAIL,
+	USER_DELETE_REQUEST,
+	USER_DELETE_SUCCESS,
+	USER_DELETE_FAIL,
+	USER_UPDATE_REQUEST,
+	USER_UPDATE_SUCCESS,
+	USER_UPDATE_FAIL,
 	USER_LIST_REQUEST,
 	USER_LIST_SUCCESS,
 	USER_LIST_FAIL,
 	USER_LIST_RESET,
 } from "../constants/userConstants";
 import { ORDER_MYORDERS_RESET } from "../constants/orderConstants";
-import { useEffect } from "react";
 
 export const login = (email, password) => async (dispatch) => {
 	try {
@@ -235,6 +240,85 @@ export const listUsersProfile = () => async (
 	} catch (error) {
 		dispatch({
 			type: USER_LIST_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const deleteUser = (deleteUserId) => async (
+	dispatch,
+	getState /* need to send a token as well getState.userInfo has our token in it*/
+) => {
+	try {
+		dispatch({
+			type: USER_DELETE_REQUEST,
+		});
+
+		const {
+			userLogin: { userInfo },
+		} = getState(); //destructuring getState().userLogin.userInfo from store intialState
+
+		const config = {
+			headers: {
+				Authorization: `Bearer ${userInfo.token}`, //passing token in header using Bearer Token
+			},
+		};
+
+		//same request as user controller
+		await axios.delete(`/api/users/${deleteUserId}`, config);
+
+		dispatch({
+			type: USER_DELETE_SUCCESS,
+		});
+	} catch (error) {
+		dispatch({
+			type: USER_DELETE_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const updateUser = (user) => async (
+	dispatch,
+	getState /* need to send a token as well getState.userInfo has our token in it*/
+) => {
+	try {
+		dispatch({
+			type: USER_UPDATE_REQUEST,
+		});
+
+		const {
+			userLogin: { userInfo },
+		} = getState(); //destructuring getState().userLogin.userInfo from store intialState
+
+		const config = {
+			headers: {
+				"Content-Type": "application/json", //add this header when update, put, post to server with josn,
+				Authorization: `Bearer ${userInfo.token}`, //passing token in header using Bearer Token
+			},
+		};
+
+		//same request as user controller
+		const { data } = await axios.put(`/api/users/${user._id}`, user, config);
+
+		dispatch({
+			type: USER_UPDATE_SUCCESS,
+		});
+
+		//alos need to passin the data from update to user details
+		dispatch({
+			type: USER_DETAILS_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: USER_UPDATE_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message
