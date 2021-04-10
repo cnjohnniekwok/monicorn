@@ -7,7 +7,7 @@ import Message from "../components/Message";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
 import { listMyOrders, deleteOrder } from "../actions/orderActions";
 import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstants";
-
+import { ORDER_DELETE_RESET } from "../constants/orderConstants";
 const ProfileScreen = ({ history, location }) => {
 	//to capture input and update state -: local state
 	const [name, setName] = useState("");
@@ -27,7 +27,7 @@ const ProfileScreen = ({ history, location }) => {
 
 	//get successful state from user update profile
 	const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
-	const { success } = userUpdateProfile;
+	const { successUpdate } = userUpdateProfile;
 
 	//declare global state (holder)
 	const orderMyOrders = useSelector((state) => state.orderMyOrders);
@@ -38,12 +38,10 @@ const ProfileScreen = ({ history, location }) => {
 
 	useEffect(
 		() => {
-			if (!userInfo) {
-				//if no userInfo
-				history.push("/login"); // redirect to login screen.
-			} else {
-				if (!user.name || success) {
+			if (userInfo) {
+				if (!user.name || successUpdate || successDel) {
 					dispatch({ type: USER_UPDATE_PROFILE_RESET });
+					dispatch({ type: ORDER_DELETE_RESET });
 					dispatch(getUserDetails("profile")); //this will hit the route /api/user/profile instead!
 					dispatch(listMyOrders()); //just need to call the function @ action in useEffect, state will update in orderMyOrders
 				} else {
@@ -51,6 +49,9 @@ const ProfileScreen = ({ history, location }) => {
 					setName(user.name);
 					setEmail(user.email);
 				}
+			} else {
+				//if no userInfo
+				history.push("/login"); // redirect to login screen.
 			}
 		},
 		[
@@ -58,7 +59,8 @@ const ProfileScreen = ({ history, location }) => {
 			history,
 			userInfo,
 			user,
-			success,
+			orders,
+			successUpdate,
 			successDel,
 		] /* dont forgot to list all the dependency when using useEffect... whatever used here */
 	);
@@ -72,15 +74,10 @@ const ProfileScreen = ({ history, location }) => {
 		}
 	};
 
-	const deleteHandler = (order, userName) => {
+	const deleteHandler = (order) => {
 		//onClick actions goes here
-		if (
-			window.confirm(
-				`Are you sure to remove order ID (${order._id}) for user (${userName})?`
-			)
-		) {
+		if (window.confirm(`Are you sure to remove order ID (${order._id})?`)) {
 			dispatch(deleteOrder(order));
-			console.log("Order reomved");
 		}
 	};
 	return (
@@ -90,7 +87,9 @@ const ProfileScreen = ({ history, location }) => {
 					<h2>User Profile</h2>
 					{message && <Message variant="danger">{message}</Message>}
 					{error && <Message variant="danger">{error}</Message>}
-					{success && <Message variant="success">Profile Updated</Message>}
+					{successUpdate && (
+						<Message variant="success">Profile Updated</Message>
+					)}
 					{loading && <Loader />}
 
 					<Form onSubmit={submitHandler}>
@@ -186,7 +185,7 @@ const ProfileScreen = ({ history, location }) => {
 										</td>
 										<td>
 											{order.isDelivered ? (
-												order.delivereAt.substring(0, 10)
+												order.deliveredAt.substring(0, 10)
 											) : (
 												<i
 													className="fas fa-times"
@@ -204,9 +203,7 @@ const ProfileScreen = ({ history, location }) => {
 												<Button
 													variant="primary"
 													className="btn-sm ml-2"
-													onClick={() =>
-														deleteHandler(order._id, order.user.name)
-													}
+													onClick={() => deleteHandler(order)}
 												>
 													<i className="fas fa-trash"></i>
 													{loadingDel && <Loader />}

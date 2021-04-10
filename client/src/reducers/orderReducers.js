@@ -20,6 +20,7 @@ import {
 	ORDER_DELETE_REQUEST,
 	ORDER_DELETE_SUCCESS,
 	ORDER_DELETE_FAIL,
+	ORDER_DELETE_RESET,
 	ORDER_MYORDERS_REQUEST,
 	ORDER_MYORDERS_SUCCESS,
 	ORDER_MYORDERS_FAIL,
@@ -142,6 +143,9 @@ export const orderDeleteReducer = (state = {}, action) => {
 				loading: false,
 				error: action.payload,
 			};
+
+		case ORDER_DELETE_RESET:
+			return {};
 		default:
 			return state;
 	}
