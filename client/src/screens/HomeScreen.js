@@ -9,6 +9,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Paginate from "../components/Paginate";
 import ProductCarousel from "../components/ProductCarousel";
+import Meta from "../components/Meta";
 
 const HomeScreen = ({ match }) => {
 	// /*========================================================================|
@@ -65,6 +66,7 @@ const HomeScreen = ({ match }) => {
 
 	return (
 		<>
+			<Meta title="Home" />
 			{!keyword && <ProductCarousel />}
 			<h1>Top Sellers!</h1>
 			{/* if loading is true, render the spilting, otherwise render product home screen*/}

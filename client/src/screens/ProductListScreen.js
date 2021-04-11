@@ -11,6 +11,7 @@ import {
 	createProduct,
 } from "../actions/productAction";
 import { PRODUCT_CREATE_RESET } from "../constants/productConstants";
+import Meta from "../components/Meta";
 
 const ProductListScreen = ({ history, match }) => {
 	const dispatch = useDispatch();
@@ -76,6 +77,7 @@ const ProductListScreen = ({ history, match }) => {
 
 	return (
 		<>
+			<Meta title="Product List" />
 			<Card className="my-3 p-3 rounded product-holder">
 				<Row className="align-items-center">
 					<Col>

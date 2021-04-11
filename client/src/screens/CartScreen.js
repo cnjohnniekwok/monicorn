@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 import Message from "../components/Message";
 import { addToCart, removeFromCart } from "../actions/cartAction";
+import Meta from "../components/Meta";
 
 //<location>?qty = location.search.qty <-- get query string and <history> is use for redriect.
 const CartScreen = ({ match, location, history }) => {
@@ -39,6 +40,7 @@ const CartScreen = ({ match, location, history }) => {
 	return (
 		<>
 			<h1>Shopping Cart</h1>
+			<Meta title="My Cart" />
 			<Row>
 				<Col md={8}>
 					{cartItems.length === 0 ? (

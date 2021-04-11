@@ -8,6 +8,7 @@ import { getUserDetails, updateUserProfile } from "../actions/userActions";
 import { listMyOrders, deleteOrder } from "../actions/orderActions";
 import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstants";
 import { ORDER_DELETE_RESET } from "../constants/orderConstants";
+import Meta from "../components/Meta";
 const ProfileScreen = ({ history, location }) => {
 	//to capture input and update state -: local state
 	const [name, setName] = useState("");
@@ -91,7 +92,7 @@ const ProfileScreen = ({ history, location }) => {
 						<Message variant="success">Profile Updated</Message>
 					)}
 					{loading && <Loader />}
-
+					<Meta title={user.name} />
 					<Form onSubmit={submitHandler}>
 						<Form.Group controlId="name">
 							<Form.Label>Name</Form.Label>

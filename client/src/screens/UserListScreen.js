@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { listUsersProfile, deleteUser } from "../actions/userActions";
+import Meta from "../components/Meta";
 
 const UserListScreen = ({ history }) => {
 	const dispatch = useDispatch();
@@ -37,6 +38,7 @@ const UserListScreen = ({ history }) => {
 
 	return (
 		<>
+			<Meta title="Users List" />
 			<Card className="my-3 p-3 rounded product-holder">
 				<h1>Users</h1>
 				{loading ? (

@@ -6,6 +6,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { login } from "../actions/userActions";
 import FormContainer from "../components/FormContainer";
+import Meta from "../components/Meta";
 
 const LoginScreen = ({ history, location }) => {
 	//to capture input and update state -: local state
@@ -45,6 +46,7 @@ const LoginScreen = ({ history, location }) => {
 			<ListGroup>
 				<Card className="my-3 p-3 rounded product-holder">
 					<h1>Sign In</h1>
+					<Meta title="Sign In" />
 					{error /* state will update once dispatch login is called */ && (
 						<Message variant="danger">{error}</Message>
 					)}

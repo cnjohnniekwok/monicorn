@@ -5,6 +5,7 @@ import FormContainer from "../components/FormContainer";
 import CheckOutSteps from "../components/CheckOutSteps";
 import { savePaymentMethod } from "../actions/cartAction";
 import { ORDER_CREATE_RESET } from "../constants/orderConstants";
+import Meta from "../components/Meta";
 
 const PaymentScreen = ({ history }) => {
 	const cart = useSelector((state) => state.cart);
@@ -27,6 +28,7 @@ const PaymentScreen = ({ history }) => {
 
 	return (
 		<>
+			<Meta title="Payment Method" />
 			<CheckOutSteps step1 step2 step3 />
 			<FormContainer>
 				<ListGroup>

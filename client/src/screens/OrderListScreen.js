@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { listAllOrders, deleteOrder } from "../actions/orderActions";
+import Meta from "../components/Meta";
 
 const OrderListScreen = ({ history }) => {
 	const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const OrderListScreen = ({ history }) => {
 
 	return (
 		<>
+			<Meta title="Customer Orders" />
 			<Card className="my-3 p-3 rounded product-holder">
 				<h1>Orders</h1>
 				{loading ? (

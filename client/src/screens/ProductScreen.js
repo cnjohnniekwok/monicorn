@@ -18,6 +18,7 @@ import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstants";
+import Meta from "../components/Meta";
 
 const ProductScreen = (props) => {
 	const [qty, setQty] = useState(1); //component scope state, set qty to only allow use select up to N items to purchase, its 1 because when user adding item into cart, there's aleast one of the item selected.
@@ -91,6 +92,7 @@ const ProductScreen = (props) => {
 				<Message variant="danger">{error}</Message>
 			) : (
 				<Card className="my-3 p-3 rounded product-holder">
+					<Meta title={product.name} />
 					<Row>
 						<Col md={6}>
 							{/* Use fluid to keep image inside of the container */}

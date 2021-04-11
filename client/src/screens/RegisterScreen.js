@@ -6,6 +6,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { register } from "../actions/userActions";
 import FormContainer from "../components/FormContainer";
+import Meta from "../components/Meta";
 
 const RegisterScreen = ({ history, location }) => {
 	//to capture input and update state -: local state
@@ -53,7 +54,7 @@ const RegisterScreen = ({ history, location }) => {
 					{message && <Message variant="danger">{message}</Message>}
 					{error && <Message variant="danger">{error}</Message>}
 					{loading && <Loader />}
-
+					<Meta title="Register" />
 					<Form onSubmit={submitHandler}>
 						<Form.Group controlId="name">
 							<Form.Label>Name</Form.Label>

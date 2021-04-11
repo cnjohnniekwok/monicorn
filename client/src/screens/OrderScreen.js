@@ -16,6 +16,7 @@ import {
 	ORDER_DELIVER_RESET,
 } from "../constants/orderConstants";
 import { deliverOrder } from "../actions/orderActions";
+import Meta from "../components/Meta";
 
 const OrderScreen = ({ match, history }) => {
 	const orderId = match.params.id;
@@ -97,6 +98,7 @@ const OrderScreen = ({ match, history }) => {
 		<Message variant="danger">{error}</Message>
 	) : (
 		<>
+			<Meta title={`Order Details: ${order._id}`} />
 			<Row>
 				<Col md={8}>
 					<ListGroup variant="flush">

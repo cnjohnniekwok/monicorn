@@ -7,6 +7,7 @@ import Message from "../components/Message";
 import { getUserDetails, updateUser } from "../actions/userActions";
 import FormContainer from "../components/FormContainer";
 import { USER_UPDATE_RESET } from "../constants/userConstants";
+import Meta from "../components/Meta";
 
 const UserEditScreen = ({ history, match }) => {
 	const userId = match.params.id;
@@ -57,6 +58,7 @@ const UserEditScreen = ({ history, match }) => {
 
 	return (
 		<>
+			<Meta title="Edit User" />
 			<FormContainer>
 				<ListGroup>
 					<Card className="my-3 p-3 rounded product-holder">

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/FormContainer";
 import CheckOutSteps from "../components/CheckOutSteps";
 import { saveShippingAddress } from "../actions/cartAction";
+import Meta from "../components/Meta";
 
 const ShippingScreen = ({ history }) => {
 	const cart = useSelector((state) => state.cart);
@@ -24,6 +25,7 @@ const ShippingScreen = ({ history }) => {
 
 	return (
 		<>
+			<Meta title="Shipping Info" />
 			<CheckOutSteps step1 step2 />
 			<FormContainer>
 				<ListGroup>

@@ -8,6 +8,7 @@ import { listProductDetails, updateProduct } from "../actions/productAction";
 import FormContainer from "../components/FormContainer";
 import { PRODUCT_UPDATE_RESET } from "../constants/productConstants";
 import axios from "axios";
+import Meta from "../components/Meta";
 
 const ProductEditScreen = ({ history, match }) => {
 	const productId = match.params.id;
