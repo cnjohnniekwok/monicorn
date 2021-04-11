@@ -57,7 +57,7 @@ h3 {
 
 .carousel-caption h2 {
 	text-align: center;
-	margin-top: 55%;
+	margin-top: 50%;
 	color: #fff;
 	font-size: 4vw;
 	border-radius: 5% 15% 5% 15%;
@@ -76,8 +76,6 @@ h3 {
 	margin-right: auto;
 	margin-top: 20px;
 	margin-bottom: 20px;
-	box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1),
-		0 7px 10px -5px rgba(0, 0, 0, 0.15);
 }
 .carousel a {
 	margin: 0 auto;

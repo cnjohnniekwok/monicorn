@@ -24,7 +24,7 @@ const Header = () => {
 				<Container>
 					{/*Brand Title*/}
 					<LinkContainer to="/">
-						<Navbar.Brand>All Things Fluffy</Navbar.Brand>
+						<Navbar.Brand className="mt-sm-2">All Things Fluffy</Navbar.Brand>
 					</LinkContainer>
 
 					<Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import Products from "../components/Product";
+import { Link } from "react-router-dom";
 import { listProducts } from "../actions/productAction"; /* using redux action reducer*/
 import { useDispatch, useSelector } from "react-redux";
 // import React, { useState, useEffect } from "react"; /* use for local state control */
@@ -67,8 +68,13 @@ const HomeScreen = ({ match }) => {
 	return (
 		<>
 			<Meta title="Home" />
-			{!keyword && <ProductCarousel />}
-			<h1>Top Sellers!</h1>
+			{!keyword ? (
+				<ProductCarousel />
+			) : (
+				<Link to="/" className="btn btn-light">
+					Return Home
+				</Link>
+			)}
 			{/* if loading is true, render the spilting, otherwise render product home screen*/}
 			{loading ? (
 				<Loader />
