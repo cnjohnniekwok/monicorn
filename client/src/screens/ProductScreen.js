@@ -239,7 +239,7 @@ const ProductScreen = (props) => {
 								) : (
 									<Message>
 										Please <Link to="/login"> Sign in</Link>
-										to write a review.{" "}
+										 to write a review.
 									</Message>
 								)}
 							</ListGroup>
