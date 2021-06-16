@@ -32,7 +32,7 @@ const Footer = () => {
 							</a>
 							<a
 								className="btn btn-outline-light btn-floating m-1"
-								href="https://github.com/cnjohnniekwok/mobar"
+								href="https://github.com/cnjohnniekwok/monicorn"
 								target="_blank"
 								rel="noreferrer"
 								role="button"
